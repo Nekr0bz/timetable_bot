@@ -1,5 +1,9 @@
 # timetable_bot
 
-scheduler run
-bot run
+go run ./cmd/cli 
+
+scheduler run 
+
+bot run  
+
 
