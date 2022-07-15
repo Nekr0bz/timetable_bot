@@ -5,7 +5,7 @@ import (
 )
 
 type Config struct {
-	TelegramBotToken string `env:"TELEGRAM_BOT_TOKEN"`
+	TelegramBotToken string `env-required:"true" env:"TELEGRAM_BOT_TOKEN" env-upd`
 }
 
 func New() (*Config, error) {

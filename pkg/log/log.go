@@ -2,8 +2,6 @@
 package log
 
 import (
-	"io"
-	"os"
 	"time"
 
 	"go.uber.org/zap"
@@ -85,25 +83,19 @@ func ResetDefault(l *Logger) {
 
 type Logger struct{ *zap.Logger }
 
-var std = New(os.Stdout, DebugLevel)
+var std = New()
 
 func Default() *Logger {
 	return std
 }
 
 // New create a new logger (not support log rotating).
-func New(writer io.Writer, level Level) *Logger {
+func New() *Logger {
 	cfg := zap.NewDevelopmentConfig()
 	cfg.EncoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 		enc.AppendString(t.Format(timeLayout))
 	}
 
-	core := zapcore.NewCore(
-		zapcore.NewConsoleEncoder(cfg.EncoderConfig),
-		zapcore.AddSync(writer),
-		zap.NewAtomicLevelAt(level),
-	)
-
-	logger := zap.New(core)
+	logger, _ := cfg.Build()
 	return &Logger{logger}
 }
