@@ -1,5 +1,9 @@
 version: "3.9"
 
+x-common-variables: &common-variables
+  POSTGRES_DB: ${POSTGRES_DB}
+  POSTGRES_USER: ${POSTGRES_USER}
+
 services:
   dev: &dev
     profiles:
@@ -7,11 +11,12 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+      target: dev
     volumes:
       - .:/opt/app
     working_dir: /opt/app
     environment:
-      DATABASE_URL: postgres://local-dev@db/api?sslmode=disable
+      <<: *common-variables
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
     links:
       - db
@@ -19,12 +24,20 @@ services:
 
   scheduler:
     <<: *dev
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: built
     profiles:
       - app
     command: app scheduler run
 
   bot:
     <<: *dev
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: built
     profiles:
       - app
     command: app bot run
@@ -34,14 +47,15 @@ services:
     volumes:
       - data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: api
-      POSTGRES_USER: local-dev
+      <<: *common-variables
       POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
 
   migrate: &basemigrate
     profiles: [ "tools" ]
     image: migrate/migrate
-    entrypoint: "migrate -database postgresql://local-dev@db/api?sslmode=disable -path /tmp/migrations"
+    entrypoint: "migrate -database postgresql://${POSTGRES_USER}@db/${POSTGRES_DB}?sslmode=disable -path /tmp/migrations"
     command: up
     links:
       - db
