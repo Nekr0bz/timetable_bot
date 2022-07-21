@@ -1,9 +1,9 @@
-package telebot
+package bot
 
 import (
 	"fmt"
 	"github.com/Nekr0bz/timetable_bot/internal/usecase"
-	"github.com/Nekr0bz/timetable_bot/pkg/log"
+	"github.com/Nekr0bz/timetable_bot/pkg/logger"
 	tele "gopkg.in/telebot.v3"
 )
 
@@ -21,7 +21,7 @@ func (h *botHandler) Register(b *tele.Bot) {
 }
 
 func (h *botHandler) debugHandler(c tele.Context) error {
-	l := log.Sugar()
+	l := logger.GetLogger().Sugar()
 	l.Info("BOT CONTEXT ",
 		"sender", c.Sender(),
 		"Chat", c.Chat(),

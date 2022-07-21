@@ -2,50 +2,62 @@ package cli
 
 import (
 	"github.com/Nekr0bz/timetable_bot/internal/config"
-	"github.com/Nekr0bz/timetable_bot/internal/controller/telebot"
+	"github.com/Nekr0bz/timetable_bot/internal/controller/bot"
 	"github.com/Nekr0bz/timetable_bot/internal/parser"
 	"github.com/Nekr0bz/timetable_bot/internal/usecase"
 	"github.com/Nekr0bz/timetable_bot/internal/usecase/repo"
-	"github.com/Nekr0bz/timetable_bot/pkg/log"
+	"github.com/Nekr0bz/timetable_bot/pkg/logger"
 	"github.com/Nekr0bz/timetable_bot/pkg/postgres"
+	"github.com/Nekr0bz/timetable_bot/pkg/telebot"
+	"github.com/Nekr0bz/timetable_bot/pkg/telebot/middleware"
 	"github.com/jasonlvhit/gocron"
 	"github.com/urfave/cli/v2"
-	tele "gopkg.in/telebot.v3"
-	"time"
+	"go.uber.org/zap"
 )
 
 func RunBot(cCtx *cli.Context) (err error) {
+	// Create logger
+	log := logger.NewAppLogger()
+
+	// Crete configs
 	cfg, err := config.New()
 	if err != nil {
-		log.Fatal("Config err", log.FError(err))
+		log.Fatal("Config err", zap.Error(err))
 	}
 
-	db, err := postgres.New(cfg.PGConfig.DB, cfg.PGConfig.HOST, cfg.PGConfig.User)
+	// Create connection to PG
+	db, err := postgres.New(cfg.PGConfig.DB, cfg.PGConfig.HOST, cfg.PGConfig.User, log)
 	if err != nil {
-		log.Fatal("Postgres err", log.FError(err))
+		log.Fatal("Postgres err", zap.Error(err))
 	}
 
-	pref := tele.Settings{
-		Token:  cfg.BotConfig.Token,
-		Poller: &tele.LongPoller{Timeout: 10 * time.Second},
-	}
-
-	b, err := tele.NewBot(pref)
+	// Create Telegram Bot
+	b, err := telebot.NewTeleBot(cfg.BotConfig.Token)
 	if err != nil {
-		log.Fatal("Telegram Bot err", log.FError(err))
+		log.Fatal("Telegram Bot err", zap.Error(err))
 	}
 
-	botHandler := telebot.NewBotHandler(usecase.NewBotUseCase(repo.NewUserRepo(db)))
+	// Set Telegram Bot Middlewares
+	b.Use(middleware.Logger(log))
+
+	// Register Telegram Bot Handler
+	botHandler := bot.NewBotHandler(usecase.NewBotUseCase(repo.NewUserRepo(db)))
 	botHandler.Register(b)
 
+	// Start...
 	log.Info("Start Telegram Bot...")
 	b.Start()
 	return
 }
 
 func RunScheduler(cCtx *cli.Context) (err error) {
+	// TODO: share struct {log, cfg, db...} to tasks
+
+	log := logger.GetLogger()
+
 	parser.InitScheduler()
 	log.Info("Start Scheduler Tasks...")
+
 	<-gocron.Start()
 	return
 }
