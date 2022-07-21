@@ -57,6 +57,7 @@ var (
 	FStackSkip  = zap.StackSkip
 	FDuration   = zap.Duration
 	FDurationp  = zap.Durationp
+	FObject     = zap.Object
 	FAny        = zap.Any
 	FError      = zap.Error
 
@@ -67,6 +68,7 @@ var (
 	Panic  = std.Panic
 	Fatal  = std.Fatal
 	Debug  = std.Debug
+	Sugar  = std.Sugar
 )
 
 // ResetDefault not safe for concurrent use
@@ -79,6 +81,7 @@ func ResetDefault(l *Logger) {
 	Panic = std.Panic
 	Fatal = std.Fatal
 	Debug = std.Debug
+	Sugar = std.Sugar
 }
 
 type Logger struct{ *zap.Logger }
