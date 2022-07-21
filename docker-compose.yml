@@ -3,6 +3,7 @@ version: "3.9"
 x-common-variables: &common-variables
   POSTGRES_DB: ${POSTGRES_DB}
   POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_HOST: ${POSTGRES_HOST}
 
 services:
   dev: &dev

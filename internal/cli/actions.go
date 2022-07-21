@@ -41,6 +41,7 @@ func RunBot(cCtx *cli.Context) (err error) {
 	b.Use(middleware.Logger(log))
 
 	// Register Telegram Bot Handler
+	// TODO: refactor
 	botHandler := bot.NewBotHandler(usecase.NewBotUseCase(repo.NewUserRepo(db)))
 	botHandler.Register(b)
 
