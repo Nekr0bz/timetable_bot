@@ -1,11 +1,13 @@
 package cli
 
 import (
-	"github.com/Nekr0bz/timetable_bot/config"
+	"github.com/Nekr0bz/timetable_bot/internal/config"
 	"github.com/Nekr0bz/timetable_bot/internal/controller/telebot"
-	"github.com/Nekr0bz/timetable_bot/internal/scheduler"
+	"github.com/Nekr0bz/timetable_bot/internal/parser"
 	"github.com/Nekr0bz/timetable_bot/internal/usecase"
+	"github.com/Nekr0bz/timetable_bot/internal/usecase/repo"
 	"github.com/Nekr0bz/timetable_bot/pkg/log"
+	"github.com/Nekr0bz/timetable_bot/pkg/postgres"
 	"github.com/jasonlvhit/gocron"
 	"github.com/urfave/cli/v2"
 	tele "gopkg.in/telebot.v3"
@@ -18,8 +20,13 @@ func RunBot(cCtx *cli.Context) (err error) {
 		log.Fatal("Config err", log.FError(err))
 	}
 
+	db, err := postgres.New(cfg.PGConfig.DB, cfg.PGConfig.HOST, cfg.PGConfig.User)
+	if err != nil {
+		log.Fatal("Postgres err", log.FError(err))
+	}
+
 	pref := tele.Settings{
-		Token:  cfg.TelegramBotToken,
+		Token:  cfg.BotConfig.Token,
 		Poller: &tele.LongPoller{Timeout: 10 * time.Second},
 	}
 
@@ -28,7 +35,7 @@ func RunBot(cCtx *cli.Context) (err error) {
 		log.Fatal("Telegram Bot err", log.FError(err))
 	}
 
-	botHandler := telebot.NewBotHandler(usecase.NewBotUseCase())
+	botHandler := telebot.NewBotHandler(usecase.NewBotUseCase(repo.NewUserRepo(db)))
 	botHandler.Register(b)
 
 	log.Info("Start Telegram Bot...")
@@ -37,7 +44,7 @@ func RunBot(cCtx *cli.Context) (err error) {
 }
 
 func RunScheduler(cCtx *cli.Context) (err error) {
-	scheduler.InitScheduler()
+	parser.InitScheduler()
 	log.Info("Start Scheduler Tasks...")
 	<-gocron.Start()
 	return

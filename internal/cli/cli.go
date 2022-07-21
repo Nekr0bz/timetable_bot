@@ -7,11 +7,11 @@ func New() *cli.App {
 		Name: "Timetable Telegram Bot",
 		Commands: []*cli.Command{
 			{
-				Name: "scheduler",
+				Name: "parser",
 				Subcommands: []*cli.Command{
 					{
-						Name:   "run",
-						Usage:  "Run Scheduler",
+						Name:   "scheduler",
+						Usage:  "Run Scheduler of Parsers",
 						Action: RunScheduler,
 					},
 				},
