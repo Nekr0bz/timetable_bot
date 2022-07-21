@@ -1,0 +1,4 @@
+pg:
+  user: 'timetable'
+  db: 'timetable'
+  host: 'localhost'
