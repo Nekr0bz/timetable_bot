@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"context"
 	"github.com/Nekr0bz/timetable_bot/internal/config"
 	"github.com/Nekr0bz/timetable_bot/internal/controller/bot"
 	"github.com/Nekr0bz/timetable_bot/internal/parser"
@@ -42,7 +43,11 @@ func RunBot(cCtx *cli.Context) (err error) {
 
 	// Register Telegram Bot Handler
 	// TODO: refactor
-	botHandler := bot.NewBotHandler(usecase.NewBotUseCase(repo.NewUserRepo(db)))
+	botHandler := bot.NewBotHandler(
+		context.Background(),
+		log,
+		usecase.NewBotUseCase(repo.NewUserRepo(db)),
+	)
 	botHandler.Register(b)
 
 	// Start...

@@ -9,7 +9,7 @@ import (
 )
 
 type BotUseCase interface {
-	SignUpUser(tele.Context) (bool, error)
+	SignUpUser(context.Context, tele.Context) (bool, error)
 }
 
 type botUseCase struct {
@@ -24,7 +24,7 @@ func NewBotUseCase(usrRepo repo.UserRepo) BotUseCase {
 
 // SignUpUser returns true if user was created
 // and false if user already exists
-func (u *botUseCase) SignUpUser(c tele.Context) (bool, error) {
+func (u *botUseCase) SignUpUser(ctx context.Context, c tele.Context) (bool, error) {
 	teleUser := c.Sender()
 	if teleUser.IsBot {
 		// TODO: custom errors!
@@ -32,6 +32,5 @@ func (u *botUseCase) SignUpUser(c tele.Context) (bool, error) {
 	}
 
 	user := entity.MarshalTeleUser(teleUser)
-	// TODO: context
-	return u.usrRepo.GetOrCreateUser(context.TODO(), user)
+	return u.usrRepo.GetOrCreateUser(ctx, user)
 }
