@@ -16,6 +16,7 @@ const (
 	startCMD = "/start"
 	debugCMD = "/debug"
 	helpCMD  = "/help"
+	infoCMD  = "/info"
 )
 
 func NewBotHandler(botUseCase usecase.BotUseCase) *botHandler {
@@ -26,6 +27,7 @@ func (h *botHandler) Register(b *tele.Bot) {
 	b.Handle(startCMD, h.startHandler)
 	b.Handle(debugCMD, h.debugHandler)
 	b.Handle(helpCMD, h.helpHandler)
+	b.Handle(infoCMD, h.infoHandler)
 }
 
 // TODO: remove this handler
@@ -51,4 +53,8 @@ func (h *botHandler) startHandler(c tele.Context) error {
 
 func (h *botHandler) helpHandler(c tele.Context) error {
 	return c.Send(helpMsg)
+}
+
+func (h *botHandler) infoHandler(c tele.Context) error {
+	return c.Send(infoMsg)
 }
