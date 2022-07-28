@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"fmt"
 	"github.com/Nekr0bz/timetable_bot/internal/usecase"
 	"go.uber.org/zap"
 	tele "gopkg.in/telebot.v3"
@@ -28,6 +29,14 @@ func (h *botHandler) Register(b *tele.Bot) {
 	b.Handle(debugCMD, h.debugHandler)
 	b.Handle(helpCMD, h.helpHandler)
 	b.Handle(infoCMD, h.infoHandler)
+	b.Handle(profileCMD, h.profileHandler)
+
+	b.Handle(&startProfileBtn, h.profileHandler)
+	//b.Handle(&startTimeTableBtn, h.debugHandler)
+
+	//b.Handle(&profileTimeTableBtn, h.debugHandler)
+	//b.Handle(&profileShareBtn, h.debugHandler)
+	//b.Handle(&profileEditBtn, h.debugHandler)
 }
 
 // TODO: remove this handler
@@ -63,4 +72,10 @@ func (h *botHandler) helpHandler(c tele.Context) error {
 
 func (h *botHandler) infoHandler(c tele.Context) error {
 	return c.Send(infoMsg)
+}
+
+func (h *botHandler) profileHandler(c tele.Context) error {
+	// TODO: get user profile
+	msg := fmt.Sprintf(profileMsg, 1, 2, 3, 4, 5, 6)
+	return c.Send(msg, profileMenu)
 }
