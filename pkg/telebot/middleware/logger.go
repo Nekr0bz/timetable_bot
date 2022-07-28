@@ -11,7 +11,11 @@ func Logger(log *zap.Logger) tele.MiddlewareFunc {
 		return func(c tele.Context) error {
 			data, _ := json.MarshalIndent(c.Update(), "", "  ")
 			log.Info(string(data))
-			return next(c)
+			err := next(c)
+			if err != nil {
+				log.Error("Telebot error", zap.Error(err))
+			}
+			return err
 		}
 	}
 }
