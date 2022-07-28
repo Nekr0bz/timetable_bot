@@ -11,15 +11,24 @@ type botHandler struct {
 	botUseCase usecase.BotUseCase
 }
 
+// bot commands
+const (
+	startCMD = "/start"
+	debugCMD = "/debug"
+	helpCMD  = "/help"
+)
+
 func NewBotHandler(botUseCase usecase.BotUseCase) *botHandler {
 	return &botHandler{botUseCase: botUseCase}
 }
 
 func (h *botHandler) Register(b *tele.Bot) {
-	b.Handle("/start", h.startHandler)
-	b.Handle("/debug", h.debugHandler)
+	b.Handle(startCMD, h.startHandler)
+	b.Handle(debugCMD, h.debugHandler)
+	b.Handle(helpCMD, h.helpHandler)
 }
 
+// TODO: remove this handler
 func (h *botHandler) debugHandler(c tele.Context) error {
 	l := logger.GetLogger().Sugar()
 	l.Info("BOT CONTEXT ",
@@ -38,4 +47,8 @@ func (h *botHandler) startHandler(c tele.Context) error {
 	}
 
 	return c.Send(fmt.Sprintf("%s", isNew))
+}
+
+func (h *botHandler) helpHandler(c tele.Context) error {
+	return c.Send(helpMsg)
 }
