@@ -11,14 +11,6 @@ type botHandler struct {
 	botUseCase usecase.BotUseCase
 }
 
-// bot commands
-const (
-	startCMD = "/start"
-	debugCMD = "/debug"
-	helpCMD  = "/help"
-	infoCMD  = "/info"
-)
-
 func NewBotHandler(botUseCase usecase.BotUseCase) *botHandler {
 	return &botHandler{botUseCase: botUseCase}
 }

@@ -1,5 +1,19 @@
 package bot
 
+// Commands endpoints
+const (
+	startCMD    = "/start"
+	debugCMD    = "/debug"
+	helpCMD     = "/help"
+	infoCMD     = "/info"
+	todayCMD    = "/today"
+	tomorrowCMD = "/tomorrow"
+	weekCMD     = "/week"
+	nextWeekCMD = "/nextweek"
+	profileCMD  = "/profile"
+)
+
+// Messages for commands
 const (
 	helpMsg = `
 📖 Список команд:
