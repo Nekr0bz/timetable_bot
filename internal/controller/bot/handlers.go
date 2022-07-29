@@ -22,23 +22,6 @@ func NewBotHandler(ctx context.Context, log *zap.Logger, botUseCase usecase.BotU
 	}
 }
 
-func (h *botHandler) Register(b *tele.Bot) {
-	initStaticMenus()
-
-	b.Handle(startCMD, h.startHandler)
-	b.Handle(debugCMD, h.debugHandler)
-	b.Handle(helpCMD, h.helpHandler)
-	b.Handle(infoCMD, h.infoHandler)
-	b.Handle(profileCMD, h.profileHandler)
-
-	b.Handle(&startProfileBtn, h.profileHandler)
-	//b.Handle(&startTimeTableBtn, h.debugHandler)
-
-	//b.Handle(&profileTimeTableBtn, h.debugHandler)
-	//b.Handle(&profileShareBtn, h.debugHandler)
-	//b.Handle(&profileEditBtn, h.debugHandler)
-}
-
 // TODO: remove this handler
 func (h *botHandler) debugHandler(c tele.Context) error {
 	l := h.log.Sugar()
@@ -78,4 +61,29 @@ func (h *botHandler) profileHandler(c tele.Context) error {
 	// TODO: get user profile
 	msg := fmt.Sprintf(profileMsg, 1, 2, 3, 4, 5, 6)
 	return c.Send(msg, profileMenu)
+}
+
+func (h *botHandler) timeTableHandler(c tele.Context) error {
+	return c.Send(choiceDateMsg, timeTableMenu)
+}
+
+func (h *botHandler) shareHandler(c tele.Context) error {
+	return c.Send(shareTextMsg, shareMenu)
+}
+
+// TODO: implement this handlers...
+func (h *botHandler) todayHandler(c tele.Context) error {
+	return c.Send("не готово", profileMenu)
+}
+
+func (h *botHandler) tomorrowHandler(c tele.Context) error {
+	return c.Send("не готово", profileMenu)
+}
+
+func (h *botHandler) weekHandler(c tele.Context) error {
+	return c.Send("не готово", profileMenu)
+}
+
+func (h *botHandler) nextWeekHandler(c tele.Context) error {
+	return c.Send("не готово", profileMenu)
 }
