@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/Nekr0bz/timetable_bot/internal/usecase"
+	"github.com/Nekr0bz/timetable_bot/pkg/utils"
 	"go.uber.org/zap"
 	tele "gopkg.in/telebot.v3"
+	"strings"
+	"time"
 )
 
 type botHandler struct {
@@ -71,19 +74,58 @@ func (h *botHandler) shareHandler(c tele.Context) error {
 	return c.Send(shareTextMsg, shareMenu)
 }
 
-// TODO: implement this handlers...
 func (h *botHandler) todayHandler(c tele.Context) error {
-	return c.Send("не готово", profileMenu)
+	today := time.Now().Format("02 Jan 2006")
+
+	rows := []string{
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+	}
+
+	msg := fmt.Sprintf(dayMsg, today, "example.com", strings.Join(rows, "\n"))
+
+	return c.Send(msg, timeTableMenu, tele.ModeMarkdown)
 }
 
 func (h *botHandler) tomorrowHandler(c tele.Context) error {
-	return c.Send("не готово", profileMenu)
+	tomorrow := time.Now().AddDate(0, 0, 1).Format("02 Jan 2006")
+
+	rows := []string{
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+	}
+
+	msg := fmt.Sprintf(dayMsg, tomorrow, "example.com", strings.Join(rows, "\n"))
+
+	return c.Send(msg, timeTableMenu, tele.ModeMarkdown)
 }
 
 func (h *botHandler) weekHandler(c tele.Context) error {
-	return c.Send("не готово", profileMenu)
+	firstDay := utils.GetMonday(time.Now())
+	lastDay := firstDay.AddDate(0, 0, 6)
+	date := firstDay.Format("02 Jan 2006") + " - " + lastDay.Format("02 Jan 2006")
+
+	rows := []string{
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+	}
+
+	msg := fmt.Sprintf(dayMsg, date, "example.com", strings.Join(rows, "\n"))
+
+	return c.Send(msg, timeTableMenu, tele.ModeMarkdown)
 }
 
 func (h *botHandler) nextWeekHandler(c tele.Context) error {
-	return c.Send("не готово", profileMenu)
+	firstDay := utils.GetMonday(time.Now().AddDate(0, 0, 7))
+	lastDay := firstDay.AddDate(0, 0, 6)
+	date := firstDay.Format("02 Jan 2006") + " - " + lastDay.Format("02 Jan 2006")
+
+	rows := []string{
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+		fmt.Sprintf(dayRowMsg, 1, 2, 3, 3, 4),
+	}
+
+	msg := fmt.Sprintf(dayMsg, date, "example.com", strings.Join(rows, "\n"))
+
+	return c.Send(msg, timeTableMenu, tele.ModeMarkdown)
 }
