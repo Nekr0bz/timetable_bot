@@ -25,6 +25,12 @@ func NewBotHandler(ctx context.Context, log *zap.Logger, botUseCase usecase.BotU
 	}
 }
 
+func (h *botHandler) makeMenuHandler(msg string, menu *tele.ReplyMarkup) tele.HandlerFunc {
+	return func(c tele.Context) error {
+		return c.Send(msg, menu)
+	}
+}
+
 // TODO: remove this handler
 func (h *botHandler) debugHandler(c tele.Context) error {
 	l := h.log.Sugar()
@@ -44,7 +50,7 @@ func (h *botHandler) startHandler(c tele.Context) error {
 		return err
 	}
 
-	// TODO: Edit menu if user is new
+	// TODO: Edit dialogMenu if user is new
 	if isNew {
 		return c.Send(startMsg, startMenu)
 	}

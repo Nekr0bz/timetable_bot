@@ -67,20 +67,30 @@ const (
 
 // Dialogs messages
 const (
-	choiceDateMsg = "Выбери день или неделю 📆"
-	shareTextMsg  = "Если тебе нравится бот, то поделись им с одногруппниками 💟"
-	shareLink     = "https://t.me/share/url?url=Я узнаю расписание нашего университета в TimeTableBot.\nПрисоединяйся\nt.me/TimetableClassesBot"
+	choiceDateMsg       = "Выбери день или неделю 📆"
+	shareTextMsg        = "Если тебе нравится бот, то поделись им с одногруппниками 💟"
+	shareLink           = "https://t.me/share/url?url=Я узнаю расписание нашего университета в TimeTableBot.\nПрисоединяйся\nt.me/TimetableClassesBot"
+	choiceUniversityMsg = "Выбери университет:"
+	choiceGroupTypeMsg  = "Тип группы:"
+	choiceFacultyMsg    = "Выбери факультет:"
+	choiceCourseMsg     = "Выбери курс:"
+	choiceGroupMsg      = "Выбери группу:"
 )
 
-// Buttons texts
+// Buttons texts (should be unique)
 const (
-	timeTableBtnText  = "Расписание 📚"
-	profileBtnText    = "Профиль 👤"
-	todayBtnText      = "Сегодня ⬇️"
-	tomorrowBtnText   = "Завтра ➡️"
-	weekBtnText       = "Неделя ⬇️"
-	nextWeekBtnText   = "Следующая неделя ➡️"
-	shareBtnText      = "Поделиться 🔗"
-	shareReplyBtnText = "Поделиться 🛸"
-	editBtnText       = "Редактировать ⚙️"
+	timeTableBtnText              = "Расписание 📚"
+	profileBtnText                = "Профиль 👤"
+	todayBtnText                  = "Сегодня ⬇️"
+	tomorrowBtnText               = "Завтра ➡️"
+	weekBtnText                   = "Неделя ⬇️"
+	nextWeekBtnText               = "Следующая неделя ➡️"
+	shareBtnText                  = "Поделиться 🔗"
+	shareReplyBtnText             = "Поделиться 🛸"
+	editBtnText                   = "Редактировать ⚙️"
+	backToStartBtnText            = "Назад ⬅️"
+	backToChoiceUniversityBtnText = "‎Назад ⬅️"
+	backToChoiceGroupTypeBtnText  = "‎Назад ⬅️‎"
+	backToChoiceFacultyBtnText    = "‎Назад‎ ⬅️‎"
+	backToChoiceCourseBtnText     = "‎Н‎азад‎ ⬅️‎"
 )
