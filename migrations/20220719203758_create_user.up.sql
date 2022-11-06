@@ -4,7 +4,8 @@ create table if not exists "user"
     first_name      varchar(255)    not null,
     last_name       varchar(255)    not null,
     username        varchar(255)    not null,
-    language_code   varchar(2)      not null
+    language_code   varchar(2)      not null,
+    created_at      timestamp       not null
 );
 
 create unique index user_id_uindex

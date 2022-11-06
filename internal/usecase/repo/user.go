@@ -40,8 +40,8 @@ func (ur *userRepo) GetUser(ctx context.Context, id int64) (user entity.User, er
 
 func (ur *userRepo) CreateUser(ctx context.Context, user *entity.User) (err error) {
 	sql, args, err := ur.db.Builder.Insert(userTableName).
-		Columns("id", "first_name", "last_name", "username", "language_code").
-		Values(user.ID, user.FirstName, user.LastName, user.Username, user.LanguageCode).
+		Columns("id", "first_name", "last_name", "username", "language_code", "created_at").
+		Values(user.ID, user.FirstName, user.LastName, user.Username, user.LanguageCode, user.CreatedAt).
 		ToSql()
 	if err != nil {
 		return err
