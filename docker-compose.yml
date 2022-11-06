@@ -35,7 +35,7 @@ services:
       target: built
     profiles:
       - app
-    command: app scheduler run
+    command: app parser scheduler
 
   bot:
     <<: *dev
