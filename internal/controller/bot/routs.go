@@ -82,7 +82,7 @@ func (h *botHandler) registerChoiceCourseMenus(b *tele.Bot, choiceMenu dialogMen
 func (h *botHandler) registerChoiceGroupMenus(b *tele.Bot, choiceMenu dialogMenu) {
 	b.Handle(&choiceMenu.backBtn, h.makeMenuHandler(choiceCourseMsg, choiceMenu.parentMenu))
 
-	//for _, dbtn := range choiceMenu.dialogBtns {
-	//b.Handle(&dbtn.btn, h.makeMenuHandler(choiceGroupMsg, dbtn.dialogMenu.menu))
-	//}
+	for _, dbtn := range choiceMenu.dialogBtns {
+		b.Handle(&dbtn.btn, h.profileHandler)
+	}
 }
