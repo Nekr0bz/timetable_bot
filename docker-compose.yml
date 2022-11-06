@@ -3,10 +3,11 @@ version: "3.9"
 x-common-variables: &common-variables
   POSTGRES_DB: ${POSTGRES_DB}
   POSTGRES_USER: ${POSTGRES_USER}
-  POSTGRES_HOST: ${POSTGRES_HOST}
+  DATABASE_HOST: ${POSTGRES_HOST}
 
 services:
   dev: &dev
+    container_name: timetable_dev
     profiles:
       - dev
     build:
@@ -19,12 +20,15 @@ services:
     environment:
       <<: *common-variables
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-    links:
+    depends_on:
       - db
+    networks:
+      - timetable
     command: go run cmd/cli/main.go bot run
 
   scheduler:
     <<: *dev
+    container_name: timetable_scheduler
     build:
       dockerfile: Dockerfile
       context: .
@@ -35,6 +39,7 @@ services:
 
   bot:
     <<: *dev
+    container_name: timetable_bot
     build:
       dockerfile: Dockerfile
       context: .
@@ -44,6 +49,7 @@ services:
     command: app bot run
 
   db:
+    container_name: timetable_postgres
     image: postgres:13-alpine
     volumes:
       - data:/var/lib/postgresql/data
@@ -52,8 +58,11 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
+    networks:
+      - timetable
 
   migrate: &basemigrate
+    container_name: timetable_migrate
     profiles: [ "tools" ]
     image: migrate/migrate
     entrypoint: "migrate -database postgresql://${POSTGRES_USER}@db/${POSTGRES_DB}?sslmode=disable -path /tmp/migrations"
@@ -62,12 +71,19 @@ services:
       - db
     volumes:
       - ./migrations:/tmp/migrations
+    networks:
+      - timetable
 
   create-migration:
     <<: *basemigrate
+    container_name: timetable_create_migration
     entrypoint: migrate create -dir /tmp/migrations -ext sql
     command: ""
 
 volumes:
   data:
+
+networks:
+  timetable:
+    driver: bridge
 

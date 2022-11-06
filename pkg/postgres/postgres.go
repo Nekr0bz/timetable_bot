@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const connAttempts = 10
+const connAttempts = 5
 
 type Postgres struct {
 	Builder squirrel.StatementBuilderType
@@ -19,6 +19,7 @@ type Postgres struct {
 
 func New(dbName, dbHost, dbUser string, log *zap.Logger) (_ *Postgres, err error) {
 	connString := fmt.Sprintf("postgres://%s@%s/%s?sslmode=disable", dbUser, dbHost, dbName)
+	log.Info("Connecting to postgres", zap.String("connString", connString))
 
 	pgConfig, err := pgxpool.ParseConfig(connString)
 	if err != nil {

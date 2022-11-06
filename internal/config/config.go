@@ -16,7 +16,7 @@ type BotConfig struct {
 type PGConfig struct {
 	User string `env-required:"true" env:"POSTGRES_USER" yaml:"user"`
 	DB   string `env-required:"true" env:"POSTGRES_DB" yaml:"db"`
-	HOST string `env-required:"true" env:"POSTGRES_HOST" yaml:"host"`
+	HOST string `env-required:"true" env:"DATABASE_HOST" yaml:"host"`
 }
 
 func New() (*Config, error) {
